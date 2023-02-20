@@ -8,10 +8,9 @@ provider "digitalocean" {
 # Create a new SSH key
 resource "digitalocean_ssh_key" "web-ssh" {
   name       = "${var.project_name}-key"
-  public_key = file(var.ssh_pub_path)
+  public_key = try(file(var.ssh_pub_path), null)
+
 }
-
-
 data "template_file" "userdata" {
   template = file("${path.module}/userdata.sh")
 }
@@ -20,7 +19,7 @@ resource "digitalocean_droplet" "web" {
   name      = "${var.project_name}-web"
   image     = "ubuntu-20-04-x64"
   region    = var.region
-  size      = "s-1vcpu-1gb"ls
+  size      = "s-1vcpu-1gb"
   backups   = true
   user_data = data.template_file.userdata.rendered
   ssh_keys  = [digitalocean_ssh_key.web-ssh.fingerprint]

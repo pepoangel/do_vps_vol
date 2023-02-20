@@ -1,4 +1,3 @@
-
 # Change the pub file location
 ssh_pub_path = "/home/pepo/.ssh/id_rsa.pub"
 #Región de despliegue
